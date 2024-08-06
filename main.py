@@ -32,21 +32,24 @@ def checkWin (row, col, isPlayer):
     arr = np.array(board.boardArr)
     blackArr = np.where(arr==board.black)   
     print("Num of pieces: ",len(blackArr[1]))
-    print("df: ",arr)
     print("Black Arr Col: ",blackArr[1])
     print("Black Arr Row: ",blackArr[0])
-    print("Continuous Len ?:",len(blackArr[1]))
+    print("Black pieces:", arr[blackArr])
+    if len(arr[blackArr])==5:
+        print(isContinuous(blackArr[1]))
 
 def isContinuous(arr):
-    print(arr)
     prev = 0
     index = 0
     #checking continuous vertical and horizontal
+    isSeq = True
     for x in arr:
         if index>0 and x-prev!=1:
-            return False
+            isSeq = False
+            break
         prev = x
-    return True
+        index+=1
+    return isSeq
 
 # return a list of pieces and their continuous position (vertical, horizontal and diagonal) and an
 # assigned ranking value
