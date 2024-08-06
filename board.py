@@ -44,8 +44,10 @@ class Board:
     def update(self,rowIndx,colIndx,piece):
         if self.isWithinRange(rowIndx,colIndx)==False:
             print('Error')
+            return False
         if self.isEmpty(rowIndx,colIndx)==False:
             print('Invalid move')
+            return False
         if piece == Piece.BLACK:
             self.boardArr[rowIndx-1][colIndx-1]=self.black 
         elif piece == Piece.WHITE:
