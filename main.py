@@ -35,7 +35,7 @@ def checkWin (row, col, isPlayer):
     print("Black Arr Col: ",blackArr[1])
     print("Black Arr Row: ",blackArr[0])
     print("Black pieces:", arr[blackArr])
-    if len(arr[blackArr])==5:
+    if len(arr[blackArr])>=5:
         print(isContinuous(blackArr[1]))
 
 def isContinuous(arr):
