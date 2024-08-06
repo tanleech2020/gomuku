@@ -4,6 +4,7 @@ from player import Player
 import random
 import numpy as np
 import pandas as pd
+import collections
 
 gameEnd = False
 board = Board(9,9)
@@ -32,6 +33,8 @@ def checkWin (row, col, isPlayer):
     arr = np.array(board.boardArr)
     blackArr = np.where(arr==board.black)   
     print("Num of pieces: ",len(blackArr[1]))
+    counter = collections.Counter(blackArr[1])
+    print("Black Arr Elements: ",counter)
     print("Black Arr Col: ",blackArr[1])
     print("Black Arr Row: ",blackArr[0])
     print("Black pieces:", arr[blackArr])
