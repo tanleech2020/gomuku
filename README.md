@@ -1,0 +1,2 @@
+# gomuku
+Gomuku in python
