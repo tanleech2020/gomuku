@@ -25,7 +25,7 @@ class Board:
         
         
     def display(self):
-        os.system('cls')
+        #os.system('cls')
         self.populateHeader()
         data = ''
         for r in range(self.rows):

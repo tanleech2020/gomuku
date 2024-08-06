@@ -2,6 +2,8 @@ from board import Board
 from piece import Piece
 from player import Player
 import random
+import numpy as np
+import pandas as pd
 
 gameEnd = False
 board = Board(9,9)
@@ -15,8 +17,36 @@ def playerRound():
     if moves[0].lower()=='q':
         return True
     board.update(int(moves[0]),int(moves[1]),player1.piece)
-    return evaluate(row_start=int(moves[0]),col_start=int(moves[1]),isPlayer=True)
+    #checkWin(0,0,True)
+    return checkWin(int(moves[0])-1,int(moves[1])-1,True)
 
+#check for winner
+def checkWin (row, col, isPlayer):
+    if isPlayer :
+        piece = Piece.BLACK
+    else :
+        piece = Piece.WHITE
+    #check row of 5
+#    df = pd.DataFrame(board.boardArr)
+#    blackArr = df.query(board.black)
+    arr = np.array(board.boardArr)
+    blackArr = np.where(arr==board.black)   
+    print("Num of pieces: ",len(blackArr[1]))
+    print("df: ",arr)
+    print("Black Arr Col: ",blackArr[1])
+    print("Black Arr Row: ",blackArr[0])
+    print("Continuous Len ?:",len(blackArr[1]))
+
+def isContinuous(arr):
+    print(arr)
+    prev = 0
+    index = 0
+    #checking continuous vertical and horizontal
+    for x in arr:
+        if index>0 and x-prev!=1:
+            return False
+        prev = x
+    return True
 
 # return a list of pieces and their continuous position (vertical, horizontal and diagonal) and an
 # assigned ranking value
