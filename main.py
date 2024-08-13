@@ -19,7 +19,9 @@ def playerRound():
         return True
     board.update(int(moves[0]),int(moves[1]),player1.piece)
     #checkWin(0,0,True)
-    return checkWin(int(moves[0])-1,int(moves[1])-1,True)
+    isWin = checkWin(int(moves[0])-1,int(moves[1])-1,True)
+    print(isWin)
+    return isWin
 
 #check for winner
 def checkWin (row, col, isPlayer):
@@ -27,49 +29,24 @@ def checkWin (row, col, isPlayer):
         piece = Piece.BLACK
     else :
         piece = Piece.WHITE
-    #check row of 5
-#    df = pd.DataFrame(board.boardArr)
-#    blackArr = df.query(board.black)
-    arr = np.array(board.boardArr)
-    blackArr = np.where(arr==board.black)   
-    print("Num of pieces: ",len(blackArr[1]))
-    counter = collections.Counter(blackArr[1])
-    print("Black Arr Elements: ",counter)
-    print("Black Arr Col: ",blackArr[1])
-    print("Black Arr Row: ",blackArr[0])
-    print("Black pieces:", arr[blackArr])
-    if len(arr[blackArr])>=5:
-        print(isContinuous(blackArr[1]))
+    return check_horizontal_win(row,col,piece)
 
-def isContinuous(arr):
-    prev = 0
-    index = 0
-    #checking continuous vertical and horizontal
-    isSeq = True
-    for x in arr:
-        if index>0 and x-prev!=1:
-            isSeq = False
-            break
-        prev = x
-        index+=1
-    return isSeq
+def check_horizontal_win(r,c,piece):
+    hStart = max(0,c-4)
+    
 
-# return a list of pieces and their continuous position (vertical, horizontal and diagonal) and an
-# assigned ranking value
-def evaluate(row_start, col_start, isPlayer):
-    count = 0
-    if isPlayer :
-        piece = Piece.BLACK
-    else :
-        piece = Piece.WHITE
-    #check up
-    for x in range(col_start-1,-1,-1):
-        pieceOn = board.getPiece(row_start-1,x)
-        if pieceOn == piece:
-            count = count+1
-    if count>=5 :
-        return True
     return False
+
+def countH_Piece(r,start,end, piece):
+    cnt = 0
+    for c in range(start,end):
+        print('start',start)
+        print('end',end)
+        if board.getPiece(r,c)==piece:
+            cnt = cnt + 1 
+    print(cnt)
+    return cnt
+
 # AI portion to compute a move
 def computerRound():
     #simple and dumb AI
