@@ -39,6 +39,7 @@ def check_horizontal_win(r,c,piece):
     if c>0:
         start = c-1
     elif c<=0:
+        #first column of the board
         start = max(0,c)
     # count left
     leftcnt = countH_Piece(r,start,-1,piece)
@@ -46,7 +47,7 @@ def check_horizontal_win(r,c,piece):
     if c < board.cols-1:
         rightcnt = countH_Piece(r,c+1,board.cols,piece)
     else:
-        #last column
+        #last column of the board
         rightcnt = 0
     print('rightcnt after left',rightcnt)
     totalcnt = totalcnt + leftcnt+rightcnt
