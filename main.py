@@ -29,7 +29,29 @@ def checkWin (row, col, isPlayer):
         piece = Piece.BLACK
     else :
         piece = Piece.WHITE
-    return check_horizontal_win(row,col,piece)
+    return check_horizontal_win(row,col,piece) or check_vertical_win(row,col,piece)
+
+def check_vertical_win(r,c,piece):
+    upcnt = 0
+    downcnt = 0
+    totalcnt = 1
+    if r>0:
+        start = r-1
+    elif r<=0:
+        #top row of the board
+        start = max(0,r)
+    #count up
+    upcnt = countV_Piece(c,start,-1,piece)
+    if r < board.rows-1:
+        downcnt = countV_Piece(c,r+1,board.rows,piece)
+    else:
+        #bottom column of the board
+        downcnt = 0
+    totalcnt = totalcnt + upcnt+downcnt
+    if totalcnt == 5:
+        return True
+
+    return False
 
 def check_horizontal_win(r,c,piece):
     leftcnt = 0
@@ -43,17 +65,27 @@ def check_horizontal_win(r,c,piece):
         start = max(0,c)
     # count left
     leftcnt = countH_Piece(r,start,-1,piece)
-    print('leftcnt',leftcnt)
     if c < board.cols-1:
         rightcnt = countH_Piece(r,c+1,board.cols,piece)
     else:
         #last column of the board
         rightcnt = 0
-    print('rightcnt after left',rightcnt)
     totalcnt = totalcnt + leftcnt+rightcnt
     if totalcnt == 5:
         return True
     return False
+
+def countV_Piece(c,start,end, piece):
+    cnt = 0
+    increment = 1
+    if start>end:
+        increment = -1
+    for r in range(start,end,increment):
+        if board.getPiece(r,c)==piece:
+            cnt = cnt + 1 
+        else:
+            break
+    return cnt
 
 def countH_Piece(r,start,end, piece):
     cnt = 0
@@ -65,7 +97,6 @@ def countH_Piece(r,start,end, piece):
             cnt = cnt + 1 
         else:
             break
-    print(cnt)
     return cnt
 
 # AI portion to compute a move
@@ -84,4 +115,6 @@ while gameEnd == False:
     if playerRound():
         gameEnd = True
         print('Game over Player 1 (human) has won the game')
+        break
+
     computerRound()
