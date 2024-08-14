@@ -54,7 +54,7 @@ class Board:
             self.boardArr[rowIndx-1][colIndx-1]=self.white
     
     def isWithinRange(self,rowIndx,colIndx):
-        if rowIndx>self.rows+1 or colIndx>self.cols+1 or rowIndx==0 or colIndx==0:
+        if rowIndx>self.rows or colIndx>self.cols or rowIndx<0 or colIndx<0:
             return False
         else:
             return True

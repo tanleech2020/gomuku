@@ -32,18 +32,38 @@ def checkWin (row, col, isPlayer):
     return check_horizontal_win(row,col,piece)
 
 def check_horizontal_win(r,c,piece):
-    hStart = max(0,c-4)
-    
-
+    leftcnt = 0
+    rightcnt = 0
+    totalcnt = 1
+    start = 0
+    if c>0:
+        start = c-1
+    elif c<=0:
+        start = max(0,c)
+    # count left
+    leftcnt = countH_Piece(r,start,-1,piece)
+    print('leftcnt',leftcnt)
+    if c < board.cols-1:
+        rightcnt = countH_Piece(r,c+1,board.cols,piece)
+    else:
+        #last column
+        rightcnt = 0
+    print('rightcnt after left',rightcnt)
+    totalcnt = totalcnt + leftcnt+rightcnt
+    if totalcnt == 5:
+        return True
     return False
 
 def countH_Piece(r,start,end, piece):
     cnt = 0
-    for c in range(start,end):
-        print('start',start)
-        print('end',end)
+    increment = 1
+    if start>end:
+        increment = -1
+    for c in range(start,end,increment):
         if board.getPiece(r,c)==piece:
             cnt = cnt + 1 
+        else:
+            break
     print(cnt)
     return cnt
 
@@ -62,4 +82,5 @@ while gameEnd == False:
     board.display()
     if playerRound():
         gameEnd = True
+        print('Game over Player 1 (human) has won the game')
     computerRound()
