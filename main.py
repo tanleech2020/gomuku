@@ -107,6 +107,7 @@ def check_diagonal_f_win(r,c,piece):
 
     return False
 
+#check for win vertically
 def check_vertical_win(r,c,piece):
     upcnt = 0
     downcnt = 0
