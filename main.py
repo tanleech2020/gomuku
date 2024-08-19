@@ -130,6 +130,7 @@ def check_vertical_win(r,c,piece):
 
     return False
 
+#check for win horizontally
 def check_horizontal_win(r,c,piece):
     leftcnt = 0
     rightcnt = 0
