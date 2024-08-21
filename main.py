@@ -225,7 +225,7 @@ def computerRound():
         valid = board.update(int(moves[0]), int(moves[1]), player2.piece)
 
 
-while gameEnd == False:
+while not gameEnd:
     # player 1 round
     board.display()
     if playerRound():
