@@ -1,8 +1,44 @@
 import unittest
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+import main
+from board import Board
+from main import check_horizontal_win, check_vertical_win, board
+from piece import Piece
+
+
+class Main_Test(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.black = Piece.BLACK
+
+    def test_check_horizontal_win_left_edge(self):
+        # horizontal from left
+        for c in range(1, 5):
+            board.update(9, c, self.black)
+        self.assertTrue(check_horizontal_win(8, 4, self.black))
+
+    def test_check_horizontal_win_right_edge(self):
+        # horizontal from right
+        test_board = Board(9, 9)
+        for c in range(9, 5, -1):
+            test_board.update(9, c, self.black)
+        self.assertTrue(check_horizontal_win(8, 4, self.black))
+
+    def test_check_horizontal_win(self):
+        # horizontal from middle
+        for c in range(5, 2, -1):
+            board.update(5, c, self.black)
+        print('last test ')
+        board.update(5, 7, self.black)
+        self.assertTrue(check_horizontal_win(4, 5, self.black))
+
+    def test_check_vertical_win_top(self):
+        # vertical from top
+        for r in range(1, 5):
+            board.update(r, 1, self.black)
+        self.assertTrue(check_vertical_win(4, 0, self.black))
+
 
 if __name__ == '__main__':
     unittest.main()
