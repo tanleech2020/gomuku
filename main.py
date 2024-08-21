@@ -219,7 +219,7 @@ def computerRound():
     #simple and dumb AI
     player2 = Player(Piece.WHITE)
     valid = False
-    while valid == False:
+    while not valid:
         moves[0] = random.randint(1, 8)
         moves[1] = random.randint(1, 8)
         valid = board.update(int(moves[0]), int(moves[1]), player2.piece)
