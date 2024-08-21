@@ -32,7 +32,7 @@ def checkWin(row, col, isPlayer):
                                                                                                                     col,
                                                                                                                     piece)
     elif (row <= 0 and col >= 8) or (row >= 8 and col <= 0):
-        # only check foreward diagonal, horizontal and vertical
+        # only check forward diagonal, horizontal and vertical
         return check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece) or check_diagonal_f_win(row,
                                                                                                                     col,
                                                                                                                     piece)
@@ -129,9 +129,9 @@ def check_vertical_win(r, c, piece):
         #top row of the board
         start = max(0, r)
     #count up
-    upcnt = countV_Piece(c, start, -1, piece)
+    upcnt = count_piece_straight(None,c,start,-1,piece) #countV_Piece(c, start, -1, piece)
     if r < board.rows - 1:
-        downcnt = countV_Piece(c, r + 1, board.rows, piece)
+        downcnt = count_piece_straight(None,c,r+1,board.rows,piece) #countV_Piece(c, r + 1, board.rows, piece)
     else:
         #bottom column of the board
         downcnt = 0
@@ -152,9 +152,9 @@ def check_horizontal_win(r, c, piece):
         #first column of the board
         start = max(0, c)
     # count left
-    left_count = countH_Piece(r, start, -1, piece)
+    left_count = count_piece_straight(r,None,start, -1, piece); #countH_Piece(r, start, -1, piece)
     if c < board.cols - 1:
-        right_count = countH_Piece(r, c + 1, board.cols, piece)
+        right_count = count_piece_straight(r,None,c+1, board.cols, piece) #countH_Piece(r, c + 1, board.cols, piece)
     else:
         #last column of the board
         right_count = 0
@@ -187,33 +187,28 @@ def countDF_Piece(start_r, end_r, start_c, end_c, piece):
         start_c = start_c + c_incr
     return cnt
 
-
-def countV_Piece(c, start, end, piece):
+def count_piece_straight(r,c,start,end,piece):
     cnt = 0
     increment = 1
     if start > end:
         increment = -1
-    for r in range(start, end, increment):
-        if board.getPiece(r, c) == piece:
-            cnt = cnt + 1
-        else:
-            break
-    return cnt
 
-
-def countH_Piece(r, start, end, piece):
-    cnt = 0
-    increment = 1
-    if start > end:
-        increment = -1
-    for c in range(start, end, increment):
-        if board.getPiece(r, c) == piece:
-            cnt = cnt + 1
-        else:
-            break
-    return cnt
-
-
+    if r == None and c != None:
+        # count vertical
+        for r in range(start, end, increment):
+            if board.getPiece(r, c) == piece:
+                cnt = cnt + 1
+            else:
+                break
+    elif r != None and c == None:
+        # count horizontal
+        for c in range(start, end, increment):
+            if board.getPiece(r, c) == piece:
+                cnt = cnt + 1
+            else:
+                break
+    return cnt    
+        
 # AI portion to compute a move
 def computerRound():
     #simple and dumb AI
