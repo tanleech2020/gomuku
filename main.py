@@ -8,45 +8,44 @@ board = Board(9, 9)
 moves = [0, 0]
 
 
-#getting player's round and update the board
+# getting player's round and update the board
 def playerRound():
     # player 1 round
     player1 = Player(Piece.BLACK)
-    moves = player1.play()
-    if moves[0].lower() == 'q':
+    player_move = player1.play()
+    if player_move[0].lower() == 'q':
         return True
-    board.update(int(moves[0]), int(moves[1]), player1.piece)
-    return checkWin(int(moves[0]) - 1, int(moves[1]) - 1, True)
+    board.update(int(player_move[0]), int(player_move[1]), player1.piece)
+    return checkWin(int(player_move[0]) - 1, int(player_move[1]) - 1, True)
 
 
-#check for winner
-def checkWin(row, col, isPlayer):
-    if isPlayer:
+# check for winner
+def checkWin(row, col, is_player):
+    if is_player:
         piece = Piece.BLACK
     else:
         piece = Piece.WHITE
 
     if (row >= 8 and col >= 8) or (row <= 0 and col <= 0):
         # only check backward diagonal, horizontal and vertical
-        return check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece) or check_diagonal_b_win(row,
-                                                                                                                    col,
-                                                                                                                    piece)
+        return (check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece)
+                or check_diagonal_b_win(row, col, piece))
     elif (row <= 0 and col >= 8) or (row >= 8 and col <= 0):
         # only check forward diagonal, horizontal and vertical
-        return check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece) or check_diagonal_f_win(row,
-                                                                                                                    col,
-                                                                                                                    piece)
+        return (check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece)
+                or check_diagonal_f_win(row,
+                                        col,
+                                        piece))
     else:
-        return check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece) or check_diagonal_f_win(row,
-                                                                                                                    col,
-                                                                                                                    piece) or check_diagonal_b_win(
-            row, col, piece)
+        return (check_horizontal_win(row, col, piece) or check_vertical_win(row, col, piece)
+                or check_diagonal_f_win(row,
+                                        col,
+                                        piece) or check_diagonal_b_win(
+                    row, col, piece))
 
 
 # checking \ diagonal backward moves
 def check_diagonal_b_win(r, c, piece):
-    leftcnt = 0
-    rightcnt = 0
     totalcnt = 1
     isTopLeftCorner = False
     isBottomRightCorner = False
@@ -58,24 +57,24 @@ def check_diagonal_b_win(r, c, piece):
         start_c = c - 1
         isBottomRightCorner = True
     elif r <= 0 and c <= 0:
-        #top left corner
+        # top left corner
         start_r = r + 1
         start_c = c + 1
         isTopLeftCorner = True
     # count left up
-    if isTopLeftCorner == False:
-        leftcnt = countDF_Piece(start_r - 1, -1, start_c - 1, -1, piece)
-        print('leftcnt: ', leftcnt)
+    if not isTopLeftCorner:
+        left_count = countDF_Piece(start_r - 1, -1, start_c - 1, -1, piece)
+    #        print('left_count: ', left_count)
     else:
-        leftcnt = 0
+        left_count = 0
     # count right down
-    if isBottomRightCorner == False:
-        rightcnt = countDF_Piece(start_r + 1, board.rows, start_c + 1, board.cols, piece)
-        print('rightcnt: ', rightcnt)
+    if not isBottomRightCorner:
+        right_count = countDF_Piece(start_r + 1, board.rows, start_c + 1, board.cols, piece)
+    #        print('right_count: ', right_count)
     else:
-        rightcnt = 0
-    totalcnt = totalcnt + leftcnt + rightcnt
-    print('total cnt: ', totalcnt)
+        right_count = 0
+    totalcnt = totalcnt + left_count + right_count
+    #    print('total cnt: ', totalcnt)
     if totalcnt == 5:
         return True
 
@@ -84,9 +83,7 @@ def check_diagonal_b_win(r, c, piece):
 
 # checking / diagonal forward moves 
 def check_diagonal_f_win(r, c, piece):
-    leftcnt = 0
-    rightcnt = 0
-    totalcnt = 1
+    total_count = 1
     isTopRightCorner = False
     isBottomLeftCorner = False
     start_r = r
@@ -97,46 +94,46 @@ def check_diagonal_f_win(r, c, piece):
         start_c = c + 1
         isBottomLeftCorner = True
     elif r <= 0 and c >= 8:
-        #top right corner
+        # top right corner
         start_r = r + 1
         start_c = c - 1
         isTopRightCorner = True
     # count left down
-    if isBottomLeftCorner == False:
-        leftcnt = countDF_Piece(start_r + 1, board.rows, start_c - 1, -1, piece)
+    if not isBottomLeftCorner:
+        left_count = countDF_Piece(start_r + 1, board.rows, start_c - 1, -1, piece)
     else:
-        leftcnt = 0
+        left_count = 0
     # count right up
-    if isTopRightCorner == False:
-        rightcnt = countDF_Piece(start_r - 1, -1, start_c + 1, board.cols, piece)
+    if not isTopRightCorner:
+        right_count = countDF_Piece(start_r - 1, -1, start_c + 1, board.cols, piece)
     else:
-        rightcnt = 0
-    totalcnt = totalcnt + leftcnt + rightcnt
-    if totalcnt == 5:
+        right_count = 0
+    total_count = total_count + left_count + right_count
+    if total_count == 5:
         return True
 
     return False
 
 
-#check for win vertically
+# check for win vertically
 def check_vertical_win(r, c, piece):
-    upcnt = 0
-    downcnt = 0
-    totalcnt = 1
+    total_count = 1
+    start = 0
     if r > 0:
         start = r - 1
     elif r <= 0:
-        #top row of the board
+        # top row of the board
         start = max(0, r)
-    #count up
-    upcnt = count_piece_straight(None,c,start,-1,piece) #countV_Piece(c, start, -1, piece)
+    # count up
+    up_count = count_piece_straight(None, c, start, -1, piece)  # countV_Piece(c, start, -1, piece)
     if r < board.rows - 1:
-        downcnt = count_piece_straight(None,c,r+1,board.rows,piece) #countV_Piece(c, r + 1, board.rows, piece)
+        down_count = count_piece_straight(None, c, r + 1, board.rows,
+                                          piece)  # countV_Piece(c, r + 1, board.rows, piece)
     else:
-        #bottom column of the board
-        downcnt = 0
-    totalcnt = totalcnt + upcnt + downcnt
-    if totalcnt == 5:
+        # bottom column of the board
+        down_count = 0
+    total_count = total_count + up_count + down_count
+    if total_count == 5:
         return True
 
     return False
@@ -149,14 +146,15 @@ def check_horizontal_win(r, c, piece):
     if c > 0:
         start = c - 1
     elif c <= 0:
-        #first column of the board
+        # first column of the board
         start = max(0, c)
     # count left
-    left_count = count_piece_straight(r,None,start, -1, piece); #countH_Piece(r, start, -1, piece)
+    left_count = count_piece_straight(r, None, start, -1, piece)
     if c < board.cols - 1:
-        right_count = count_piece_straight(r,None,c+1, board.cols, piece) #countH_Piece(r, c + 1, board.cols, piece)
+        right_count = count_piece_straight(r, None, c + 1, board.cols,
+                                           piece)
     else:
-        #last column of the board
+        # last column of the board
         right_count = 0
     total_count = total_count + left_count + right_count
     if total_count == 5:
@@ -187,31 +185,33 @@ def countDF_Piece(start_r, end_r, start_c, end_c, piece):
         start_c = start_c + c_incr
     return cnt
 
-def count_piece_straight(r,c,start,end,piece):
+
+def count_piece_straight(r, c, start, end, piece):
     cnt = 0
     increment = 1
     if start > end:
         increment = -1
 
-    if r == None and c != None:
+    if r is None and c is not None:
         # count vertical
         for r in range(start, end, increment):
             if board.getPiece(r, c) == piece:
                 cnt = cnt + 1
             else:
                 break
-    elif r != None and c == None:
+    elif r is not None and c is None:
         # count horizontal
         for c in range(start, end, increment):
             if board.getPiece(r, c) == piece:
                 cnt = cnt + 1
             else:
                 break
-    return cnt    
-        
+    return cnt
+
+
 # AI portion to compute a move
 def computerRound():
-    #simple and dumb AI
+    # simple and dumb AI
     player2 = Player(Piece.WHITE)
     valid = False
     while not valid:
