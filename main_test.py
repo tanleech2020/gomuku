@@ -1,6 +1,5 @@
 import unittest
 
-import main
 from board import Board
 from main import check_horizontal_win, check_vertical_win, board
 from piece import Piece
